@@ -1,0 +1,6 @@
+alias compose='docker-compose -p grokking-algorithms -f docker-compose.yml'
+alias up='compose up -d'
+alias down='compose down'
+alias pdash='compose exec app sh'
+alias nginx='compose exec nginx bash'
+alias restart='down && up'
