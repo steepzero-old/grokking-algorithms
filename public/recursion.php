@@ -99,10 +99,10 @@ function search_rec(array $arr, int $num): ?int
     $halfIndex = round((count($arr) - 1) / 2, 0, PHP_ROUND_HALF_DOWN);
 
     if ($arr[$halfIndex] > $num) {
-        return search_rec(array_slice($arr, 0, $halfIndex), $num);
+        return path_list(array_slice($arr, 0, $halfIndex), $num);
     } else {
         if ($arr[$halfIndex] < $num) {
-            return $halfIndex + 1 + search_rec(array_slice($arr, $halfIndex + 1), $num);
+            return $halfIndex + 1 + path_list(array_slice($arr, $halfIndex + 1), $num);
         } else {
             return $halfIndex;
         }

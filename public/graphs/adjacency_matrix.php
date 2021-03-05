@@ -47,16 +47,49 @@ function path_length_wide_2(array $graph, int $start, int $finish): array
     }
 
     $reversedPath = [$destination];
-    $vertex = $destination;
+    $vertex       = $destination;
 
     while ($prev = $vertex->getPrev()) {
         $reversedPath[] = $prev;
-        $vertex = $prev;
+        $vertex         = $prev;
     }
 
     return $reversedPath;
 }
 
+function path_list_rec(array $graph, int $start, int $finish): array
+{
+    $stack  = [$start => [$start => true]];
+    $result = [];
+
+    while (count($stack)) {
+        $current = array_keys($stack)[count($stack) - 1];
+
+        if ($current === $finish) {
+            $result[] = array_keys($stack);
+            array_pop($stack);
+        } else {
+            $goingDeep = false;
+            foreach ($graph[$current] as $neighborIndex => $exists) {
+                if ($exists && !isset($stack[$current][$neighborIndex])) {
+                    $stack[$current][$neighborIndex] = true;
+                    $stack[$neighborIndex]           = $stack[$current];
+                    $goingDeep                       = true;
+                    break;
+                }
+            }
+
+            if (!$goingDeep) {
+                array_pop($stack);
+            }
+        }
+    }
+
+    return $result;
+}
+
 $start  = 0;
 $finish = 6;
-print_r(array_map(fn($vertex) => $vertex->getIndex(), path_length_wide_2($graph, $start, $finish)));
+$paths  = path_list_rec($graph, $start, $finish);
+
+print_r($paths);
